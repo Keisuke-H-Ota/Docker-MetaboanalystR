@@ -1,0 +1,17 @@
+version: '3'
+services:
+  docker-metaboanalystr: # サービス名に大文字は使用しない
+    image: docker-metaboanalystr # イメージ名の設定
+    restart: always # exec 時に再起動する
+    build: .
+    container_name: 'docker-metaboanalystr-container'
+    ports: # ポートフォワーディング
+      - "8001:8001" # （ローカルホストのポート）:（マウント先のポート）
+    working_dir: '/root/'
+    tty: true # docker-compose up したコンテナを起動させ続ける
+    volumes: # ボリュームのマウント
+      - ./src:/root/src/ #（ローカルホストのディレクトリ）:（マウント先のディレクトリ）
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    cap_add:
+      - SYS_ADMIN
+    command: /sbin/init
